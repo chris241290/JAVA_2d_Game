@@ -1,10 +1,11 @@
-package entity;
+package entity.player;
 
+import entity.Entity;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import main.KeyHandler;
+import entity.player.keyhandler.KeyHandler;
 
 // classe Player (sottoclasse di Entity) che è la classe che definisce il nostro player (giocatore)
 public class Player extends Entity {
@@ -48,11 +49,11 @@ public class Player extends Entity {
   }
 
   public void update() {
-    if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
+    if (keyH.isUpPressed() == true || keyH.isDownPressed() == true || keyH.isLeftPressed() == true || keyH.isRightPressed() == true) {
       // Struttura condizionale che a seconda del tasto premuto updata la posizione del tiles del player
       // Sè la variabile upPressed(sopra) è settata a true (quindi è stato premuto il tasto associato a playerup(w nel nostro caso)
       // allora fa l'operazione playerY = playerY - playerSpeed
-      if (keyH.upPressed == true) {
+      if (keyH.isUpPressed() == true) {
         System.out.println("Premuto tasto UP");
         // setta direction nella direzione corrispondente
         super.setDirection("up");
@@ -60,17 +61,17 @@ public class Player extends Entity {
         super.setY(super.getY() - super.getSpeed());
       }
       // Fa l'opposto (addizione) per farlo andare giù
-      else if (keyH.downPressed == true) {
+      else if (keyH.isDownPressed() == true) {
         System.out.println("Premuto tasto DOWN");
         super.setDirection("down");
         super.setY(super.getY() + super.getSpeed());
       }
       // Fa le stesse operazioni sulla variabile PlayerX per muoversi a destra e sinistra
-      else if (keyH.leftPressed == true) {
+      else if (keyH.isLeftPressed() == true) {
         System.out.println("Premuto tasto LEFT");
         super.setDirection("left");
         super.setX(super.getX() - super.getSpeed());
-      } else if (keyH.rightPressed == true) {
+      } else if (keyH.isRightPressed() == true) {
         System.out.println("Premuto tasto RIGHT");
         super.setDirection("right");
         super.setX(super.getX() + super.getSpeed());

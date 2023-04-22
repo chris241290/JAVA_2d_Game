@@ -1,6 +1,9 @@
-package main;
+package gamepanel;
 
-import entity.Player;
+import constants.paint.PaintConstants;
+import constants.run.RunConstants;
+import entity.player.Player;
+import entity.player.keyhandler.KeyHandler;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -10,51 +13,32 @@ import javax.swing.JPanel;
 // Classe Jpanel che è una subclasse di GamePanel e ha l'interfaccia Runnable
 public class GamePanel extends JPanel implements Runnable {
 
-  // setta la size di base degli elementi di gioco (player,npcs etcs)
-  final int originalTileSize = 16; // 16x16 pixel tile
-  // setta la scale del monitor  a 3   16x3 = 48  pixel così il nostro tile sarà 16x16 ma sembrerà 48x48
-  final int scale = 3;
-  // setta la tile size
-  public final int tileSize = originalTileSize * scale; // 48x48 pixel tile
-  // settaggio della dimensione massima di tiles visibili nello screen utilizzando righe e colonne (la ratio è 4 to 3)
-  // 16 colonne orizzontali  (questa variabile se modificata cambierà automaticamente la larghezza dello screen)
-  final int maxScreenCol = 16;
-  // 12 righe verticali      (questa variabile se modificata cambierà automaticamente la lunghezza dello screen)
-  final int maxScreenRow = 12;
-  // settaggio width dello screen
-  final int screenWidth = tileSize * maxScreenCol; // 768 pixels (altezza)
-  // settaggio height dello screen
-  final int screenHeight = tileSize * maxScreenRow; // 576 pixels (larghezza)
-
-  // FPS : settaggio degli fps (frame per seconds) a cui viene runnato il gioco (velocità di update)
-  int fps = 60;
-
-  KeyHandler keyH;
-  Player player;
-  Thread gameThread;
   // Setta la posizione di default del player (userò queste variabili come argomenti del metodo fillrect in paint componet
-  int playerX = 100;
-  int playerY = 100;
+  private static final int PLAYER_X = 100;
+  private static final int PLAYER_Y = 100;
   // Setta la velocità del tiles che usiamo come character (4 pixel)
-  int playerSpeed = 4;
+  private static final int PLAYER_SPEED = 4;
+
+  private KeyHandler keyH;
+  private Player player;
+  private Thread gameThread;
 
   // Metodo che definisce l'aspetto del nostro game panel
   public GamePanel() {
     // Istanza della classe KeyHandler sotto la variabile keyH
     keyH = new KeyHandler();
     // Creazione dell'istanza della classe player (nuovo oggetto di tipo player)
-    player = new Player(tileSize, keyH);
+    player = new Player(PaintConstants.TILE_SIZE, keyH);
     // Imposta la size passando come argomento alla funzione Dimension le due variabili che abbiamo creato
-    this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+    setPreferredSize(new Dimension(PaintConstants.SCREEN_WIDTH, PaintConstants.SCREEN_HEIGHT));
     // setta il colore del background del nostro panel (nero)
-    this.setBackground(Color.black);
+    setBackground(Color.black);
     // setta il doppio buffer ( per maggiori info leggiti il metodo cristo)
-    this.setDoubleBuffered(true);
+    setDoubleBuffered(true);
     // Questi due metodi permettono al gamepanel di gestire la sottoclasse KeyListener (di KeyHandler)
-    this.addKeyListener(keyH);
+    addKeyListener(keyH);
     // focusable permette al gamepanel di ricevere i key input
-    this.setFocusable(true);
-
+    setFocusable(true);
   }
 
   // Metodo che crea il game thread
@@ -63,17 +47,13 @@ public class GamePanel extends JPanel implements Runnable {
     // Metodo che crea un nuovo oggetto di Thread (leggi il metodo per maggiori info)
     gameThread = new Thread(this);
     gameThread.start();
-
   }
 
   // Metodo run che cicla update e redraw del programma
   @Override  // Metodo per runnarlo (Metodo Run dell'interfaccia Runnable sovrascritto)
   public void run() {
-
-    // Game loop di tipo "sleep"
-    double drawInterval = 1000000000 / fps;
-    double nextDrawTime = System.nanoTime() + drawInterval;
-    System.out.println("FPS:" + fps);
+    double nextDrawTime = System.nanoTime() + RunConstants.DRAW_INTERVAL;
+    System.out.println("FPS:" + RunConstants.FPS);
     // Ciclo per il loop di gioco
     while (gameThread != null) {
       // Setta la variabile currentTime con System.nanotime che returna
@@ -103,17 +83,11 @@ public class GamePanel extends JPanel implements Runnable {
           remainingTime = 0;
         }
         Thread.sleep((long) remainingTime);
-        nextDrawTime += drawInterval;
+        nextDrawTime += RunConstants.DRAW_INTERVAL;
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-  }
-
-  // Creazione del metodo update che chiameremo nel loop di gioco
-  public void update() {
-    // chiama il metodo update dalla classe Player
-    player.update();
   }
 
   // la matita o il pennello con cui disegnamo
@@ -128,6 +102,12 @@ public class GamePanel extends JPanel implements Runnable {
     player.draw(g2);
     // dispose delle risorse occupate (non obbligatorio ma ottimizza l'utilizzo di memoria del software)
     g2.dispose();
+  }
+
+  // Creazione del metodo update che chiameremo nel loop di gioco
+  public void update() {
+    // chiama il metodo update dalla classe Player
+    player.update();
   }
 
 }

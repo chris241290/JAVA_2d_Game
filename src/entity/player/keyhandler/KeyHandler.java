@@ -1,4 +1,4 @@
-package main;
+package entity.player.keyhandler;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -6,7 +6,10 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 
   // variabili boolean per l'associazione dei tasti
-  public boolean upPressed, downPressed, leftPressed, rightPressed;
+  private boolean upPressed;
+  private boolean downPressed;
+  private boolean leftPressed;
+  private boolean rightPressed;
 
   // Metodi keyEvent sovrascritto con strutture condizionali e variabili booleane
   @Override
@@ -62,4 +65,35 @@ public class KeyHandler implements KeyListener {
     }
   }
 
+  public boolean isUpPressed() {
+    return upPressed;
+  }
+
+  public void setUpPressed(boolean upPressed) {
+    this.upPressed = upPressed;
+  }
+
+  public boolean isDownPressed() {
+    return downPressed;
+  }
+
+  public void setDownPressed(boolean downPressed) {
+    this.downPressed = downPressed;
+  }
+
+  public boolean isLeftPressed() {
+    return leftPressed;
+  }
+
+  public void setLeftPressed(boolean leftPressed) {
+    this.leftPressed = leftPressed;
+  }
+
+  public boolean isRightPressed() {
+    return rightPressed;
+  }
+
+  public void setRightPressed(boolean rightPressed) {
+    this.rightPressed = rightPressed;
+  }
 }
