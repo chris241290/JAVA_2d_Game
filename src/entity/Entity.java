@@ -23,7 +23,7 @@ public class Entity {
   private BufferedImage right2;
   // Variabile stringa direction su cui faremo lo switch case delle stringhe
   // "up" "down" etc. per gestire le variabili BufferedImagee aggiornare le animazioni su schermo
-  private String direction;
+  private Direction direction;
   // variabili int contatori degli sprite per cambiare le animazioni
   private int spriteCounter = 0;
   private int spriteNum = 1;
@@ -116,11 +116,11 @@ public class Entity {
     this.right2 = right2;
   }
 
-  public String getDirection() {
+  public Direction getDirection() {
     return direction;
   }
 
-  public void setDirection(String direction) {
+  public void setDirection(Direction direction) {
     this.direction = direction;
   }
 

@@ -1,17 +1,19 @@
 package entity.player;
 
+import constants.player.PlayerContants;
+import entity.Direction;
 import entity.Entity;
+import entity.player.keyhandler.KeyHandler;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import entity.player.keyhandler.KeyHandler;
 
 // classe Player (sottoclasse di Entity) che è la classe che definisce il nostro player (giocatore)
 public class Player extends Entity {
 
-  private int tileSize;
-  private KeyHandler keyH;
+  private final int tileSize;
+  private final KeyHandler keyH;
 
   // Metodo costruttore di Player (argomenti : un oggetto di tipo GamePanel e uno di tipo KeyHandler,
   public Player(int tileSize, KeyHandler keyH) {
@@ -20,19 +22,19 @@ public class Player extends Entity {
     // chiamiamo il metoto setDefaultValues() all'interno di questo costruttore
     // per settare i valori di default
     setDefaultValues();
-    getPlayerImage();
+    loadPlayerImages();
   }
 
   // Metodo che setta la posizione di default del Player
   public void setDefaultValues() {
-    super.setY(100);
-    super.setX(100);
-    super.setSpeed(4);
-    super.setDirection("down");
+    super.setY(PlayerContants.DEFAULT_PLAYER_Y);
+    super.setX(PlayerContants.DEFAULT_PLAYER_X);
+    super.setSpeed(PlayerContants.DEFAULT_PLAYER_SPEED);
+    super.setDirection(PlayerContants.DEFAULT_PLAYER_DIRECTION);
   }
 
   // Load delle immagini dalla source res/player sulle variabili delle direzioni
-  public void getPlayerImage() {
+  public void loadPlayerImages() {
     try {
       super.setUp1(ImageIO.read(getClass().getResourceAsStream("/player/up1.png")));
       super.setUp2(ImageIO.read(getClass().getResourceAsStream("/player/up2.png")));
@@ -49,31 +51,31 @@ public class Player extends Entity {
   }
 
   public void update() {
-    if (keyH.isUpPressed() == true || keyH.isDownPressed() == true || keyH.isLeftPressed() == true || keyH.isRightPressed() == true) {
+    if (keyH.isUpPressed() || keyH.isDownPressed() || keyH.isLeftPressed() || keyH.isRightPressed()) {
       // Struttura condizionale che a seconda del tasto premuto updata la posizione del tiles del player
       // Sè la variabile upPressed(sopra) è settata a true (quindi è stato premuto il tasto associato a playerup(w nel nostro caso)
       // allora fa l'operazione playerY = playerY - playerSpeed
-      if (keyH.isUpPressed() == true) {
+      if (keyH.isUpPressed()) {
         System.out.println("Premuto tasto UP");
         // setta direction nella direzione corrispondente
-        super.setDirection("up");
+        super.setDirection(Direction.UP);
         // sottrae dalle coordinate Y la velocità impostata del player per farlo muovere
         super.setY(super.getY() - super.getSpeed());
       }
       // Fa l'opposto (addizione) per farlo andare giù
-      else if (keyH.isDownPressed() == true) {
+      else if (keyH.isDownPressed()) {
         System.out.println("Premuto tasto DOWN");
-        super.setDirection("down");
+        super.setDirection(Direction.DOWN);
         super.setY(super.getY() + super.getSpeed());
       }
       // Fa le stesse operazioni sulla variabile PlayerX per muoversi a destra e sinistra
-      else if (keyH.isLeftPressed() == true) {
+      else if (keyH.isLeftPressed()) {
         System.out.println("Premuto tasto LEFT");
-        super.setDirection("left");
+        super.setDirection(Direction.LEFT);
         super.setX(super.getX() - super.getSpeed());
-      } else if (keyH.isRightPressed() == true) {
+      } else if (keyH.isRightPressed()) {
         System.out.println("Premuto tasto RIGHT");
-        super.setDirection("right");
+        super.setDirection(Direction.RIGHT);
         super.setX(super.getX() + super.getSpeed());
       }
       super.setSpriteCounter(super.getSpriteCounter() + 1);
@@ -101,7 +103,7 @@ public class Player extends Entity {
       // Switch case sulla variabile BufferedImage direction con i case stringa
       // daranno il valore (stringa/directory dell'immagine) alla variabile image
       // gli if sfruttano la variabile int come contatore per cambiare le animazioni
-      case "up":
+      case UP -> {
         if (super.getSpriteNum() == 1) {
           image = super.getUp1();
           System.out.println("Draw immagine Up1");
@@ -110,9 +112,8 @@ public class Player extends Entity {
           image = super.getUp2();
           System.out.println("Draw immagine Up2");
         }
-        break;
-
-      case "down":
+      }
+      case DOWN -> {
         if (super.getSpriteNum() == 1) {
           image = super.getDown1();
           System.out.println("Draw immagine Down1");
@@ -121,9 +122,8 @@ public class Player extends Entity {
           image = super.getDown2();
           System.out.println("Draw immagine Down2");
         }
-        break;
-
-      case "left":
+      }
+      case LEFT -> {
         if (super.getSpriteNum() == 1) {
           image = super.getLeft1();
           System.out.println("Draw immagine Left1");
@@ -132,9 +132,8 @@ public class Player extends Entity {
           image = super.getLeft2();
           System.out.println("Draw immagine Left2");
         }
-        break;
-
-      case "right":
+      }
+      case RIGHT -> {
         if (super.getSpriteNum() == 1) {
           image = super.getRight1();
           System.out.println("Draw immagine Right1");
@@ -143,8 +142,7 @@ public class Player extends Entity {
           image = super.getRight2();
           System.out.println("Draw immagine Right2");
         }
-
-        break;
+      }
     }
     g2.drawImage(image, super.getX(), super.getY(), tileSize, tileSize, null);
   }

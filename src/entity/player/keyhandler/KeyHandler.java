@@ -23,23 +23,13 @@ public class KeyHandler implements KeyListener {
     // Questo metodo fà il return della key che è stata premuta e la associa alla variabile code
     int code = e.getKeyCode();
     // Associa alle variabili boolean la condizione true se viene premuto il tasto associato
-    // Sopra
-    if (code == KeyEvent.VK_W) {
-      upPressed = true;
+    switch (code) {
+      case KeyEvent.VK_W -> upPressed = true;
+      case KeyEvent.VK_S -> downPressed = true;
+      case KeyEvent.VK_A -> leftPressed = true;
+      case KeyEvent.VK_D -> rightPressed = true;
+      default -> System.out.println("Tasto non gestito!");
     }
-    // Sotto
-    if (code == KeyEvent.VK_S) {
-      downPressed = true;
-    }
-    // Sinistra
-    if (code == KeyEvent.VK_A) {
-      leftPressed = true;
-    }
-    // Destra
-    if (code == KeyEvent.VK_D) {
-      rightPressed = true;
-    }
-
   }
 
   // Metodo keyReleased sovrascritto
