@@ -14,44 +14,31 @@ public class KeyHandler implements KeyListener {
   // Metodi keyEvent sovrascritto con strutture condizionali e variabili booleane
   @Override
   public void keyTyped(KeyEvent e) {
-
+    // TODO document why this method is empty
   }
 
   // Metodo keyPressed sovrascritto
   @Override
   public void keyPressed(KeyEvent e) {
     // Questo metodo fà il return della key che è stata premuta e la associa alla variabile code
-    int code = e.getKeyCode();
-    // Associa alle variabili boolean la condizione true se viene premuto il tasto associato
-    switch (code) {
-      case KeyEvent.VK_W -> upPressed = true;
-      case KeyEvent.VK_S -> downPressed = true;
-      case KeyEvent.VK_A -> leftPressed = true;
-      case KeyEvent.VK_D -> rightPressed = true;
-      default -> System.out.println("Tasto non gestito!");
-    }
+    handleButtons(e, true);
   }
 
   // Metodo keyReleased sovrascritto
   @Override
   public void keyReleased(KeyEvent e) {
     // Setta i valori a false se la key viene rilasciata
+    handleButtons(e, false);
+  }
+
+  private void handleButtons(KeyEvent e, boolean pressed) {
     int code = e.getKeyCode();
-    // Sopra
-    if (code == KeyEvent.VK_W) {
-      upPressed = false;
-    }
-    // Sotto
-    if (code == KeyEvent.VK_S) {
-      downPressed = false;
-    }
-    // Sinistra
-    if (code == KeyEvent.VK_A) {
-      leftPressed = false;
-    }
-    // Destra
-    if (code == KeyEvent.VK_D) {
-      rightPressed = false;
+    switch (code) {
+      case KeyEvent.VK_W -> upPressed = pressed;
+      case KeyEvent.VK_S -> downPressed = pressed;
+      case KeyEvent.VK_A -> leftPressed = pressed;
+      case KeyEvent.VK_D -> rightPressed = pressed;
+      default -> System.out.println("Tasto non gestito!");
     }
   }
 

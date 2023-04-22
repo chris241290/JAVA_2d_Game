@@ -7,6 +7,7 @@ import entity.player.keyhandler.KeyHandler;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 import javax.imageio.ImageIO;
 
 // classe Player (sottoclasse di Entity) che è la classe che definisce il nostro player (giocatore)
@@ -36,14 +37,14 @@ public class Player extends Entity {
   // Load delle immagini dalla source res/player sulle variabili delle direzioni
   public void loadPlayerImages() {
     try {
-      super.setUp1(ImageIO.read(getClass().getResourceAsStream("/player/up1.png")));
-      super.setUp2(ImageIO.read(getClass().getResourceAsStream("/player/up2.png")));
-      super.setDown1(ImageIO.read(getClass().getResourceAsStream("/player/down2.png")));
-      super.setDown2(ImageIO.read(getClass().getResourceAsStream("/player/down1.png")));
-      super.setLeft1(ImageIO.read(getClass().getResourceAsStream("/player/left1.png")));
-      super.setLeft2(ImageIO.read(getClass().getResourceAsStream("/player/left2.png")));
-      super.setRight1(ImageIO.read(getClass().getResourceAsStream("/player/right1.png")));
-      super.setRight2(ImageIO.read(getClass().getResourceAsStream("/player/right2.png")));
+      super.setUp1(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/up1.png"))));
+      super.setUp2(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/up2.png"))));
+      super.setDown1(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/down2.png"))));
+      super.setDown2(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/down1.png"))));
+      super.setLeft1(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/left1.png"))));
+      super.setLeft2(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/left2.png"))));
+      super.setRight1(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/right1.png"))));
+      super.setRight2(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/right2.png"))));
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -52,43 +53,51 @@ public class Player extends Entity {
 
   public void update() {
     if (keyH.isUpPressed() || keyH.isDownPressed() || keyH.isLeftPressed() || keyH.isRightPressed()) {
-      // Struttura condizionale che a seconda del tasto premuto updata la posizione del tiles del player
-      // Sè la variabile upPressed(sopra) è settata a true (quindi è stato premuto il tasto associato a playerup(w nel nostro caso)
-      // allora fa l'operazione playerY = playerY - playerSpeed
-      if (keyH.isUpPressed()) {
-        System.out.println("Premuto tasto UP");
-        // setta direction nella direzione corrispondente
-        super.setDirection(Direction.UP);
-        // sottrae dalle coordinate Y la velocità impostata del player per farlo muovere
-        super.setY(super.getY() - super.getSpeed());
-      }
-      // Fa l'opposto (addizione) per farlo andare giù
-      else if (keyH.isDownPressed()) {
-        System.out.println("Premuto tasto DOWN");
-        super.setDirection(Direction.DOWN);
-        super.setY(super.getY() + super.getSpeed());
-      }
-      // Fa le stesse operazioni sulla variabile PlayerX per muoversi a destra e sinistra
-      else if (keyH.isLeftPressed()) {
-        System.out.println("Premuto tasto LEFT");
-        super.setDirection(Direction.LEFT);
-        super.setX(super.getX() - super.getSpeed());
-      } else if (keyH.isRightPressed()) {
-        System.out.println("Premuto tasto RIGHT");
-        super.setDirection(Direction.RIGHT);
-        super.setX(super.getX() + super.getSpeed());
-      }
-      super.setSpriteCounter(super.getSpriteCounter() + 1);
-      if (super.getSpriteCounter() > 10) {
-        if (super.getSpriteNum() == 1) {
-          super.setSpriteNum(2);
-        } else if (super.getSpriteNum() == 2) {
-          super.setSpriteNum(1);
-        }
-        super.setSpriteCounter(0);
-      }
+      updateDirectionAndSpeed();
+      updateSpriteCounter();
     }
 
+  }
+
+  private void updateSpriteCounter() {
+    super.setSpriteCounter(super.getSpriteCounter() + 1);
+    if (super.getSpriteCounter() > 10) {
+      if (super.getSpriteNum() == 1) {
+        super.setSpriteNum(2);
+      } else if (super.getSpriteNum() == 2) {
+        super.setSpriteNum(1);
+      }
+      super.setSpriteCounter(0);
+    }
+  }
+
+  private void updateDirectionAndSpeed() {
+    // Struttura condizionale che a seconda del tasto premuto updata la posizione del tiles del player
+    // Sè la variabile upPressed(sopra) è settata a true (quindi è stato premuto il tasto associato a playerup(w nel nostro caso)
+    // allora fa l'operazione playerY = playerY - playerSpeed
+    if (keyH.isUpPressed()) {
+      System.out.println("Premuto tasto UP");
+      // setta direction nella direzione corrispondente
+      super.setDirection(Direction.UP);
+      // sottrae dalle coordinate Y la velocità impostata del player per farlo muovere
+      super.setY(super.getY() - super.getSpeed());
+    }
+    // Fa l'opposto (addizione) per farlo andare giù
+    else if (keyH.isDownPressed()) {
+      System.out.println("Premuto tasto DOWN");
+      super.setDirection(Direction.DOWN);
+      super.setY(super.getY() + super.getSpeed());
+    }
+    // Fa le stesse operazioni sulla variabile PlayerX per muoversi a destra e sinistra
+    else if (keyH.isLeftPressed()) {
+      System.out.println("Premuto tasto LEFT");
+      super.setDirection(Direction.LEFT);
+      super.setX(super.getX() - super.getSpeed());
+    } else if (keyH.isRightPressed()) {
+      System.out.println("Premuto tasto RIGHT");
+      super.setDirection(Direction.RIGHT);
+      super.setX(super.getX() + super.getSpeed());
+    }
   }
 
   public void draw(Graphics g2) {
