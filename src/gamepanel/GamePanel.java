@@ -9,18 +9,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import tiles.TileManager;
 
 // Classe Jpanel che è una subclasse di GamePanel e ha l'interfaccia Runnable
 public class GamePanel extends JPanel implements Runnable {
 
-  // Setta la posizione di default del player (userò queste variabili come argomenti del metodo fillrect in paint componet
-  private static final int PLAYER_X = 100;
-  private static final int PLAYER_Y = 100;
-  // Setta la velocità del tiles che usiamo come character (4 pixel)
-  private static final int PLAYER_SPEED = 4;
-
   private KeyHandler keyH;
   private Player player;
+
+  private TileManager tileManager;
   private Thread gameThread;
 
   // Metodo che definisce l'aspetto del nostro game panel
@@ -29,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable {
     keyH = new KeyHandler();
     // Creazione dell'istanza della classe player (nuovo oggetto di tipo player)
     player = new Player(PaintConstants.TILE_SIZE, keyH);
+    tileManager = new TileManager(PaintConstants.TILE_SIZE);
     // Imposta la size passando come argomento alla funzione Dimension le due variabili che abbiamo creato
     setPreferredSize(new Dimension(PaintConstants.SCREEN_WIDTH, PaintConstants.SCREEN_HEIGHT));
     // setta il colore del background del nostro panel (nero)
@@ -98,6 +96,9 @@ public class GamePanel extends JPanel implements Runnable {
     // istanza della classe Graphics2D che è una sottoclasse di Graphics
     //che si occupa del disegno e del controllo della geometria del programma
     Graphics2D g2 = (Graphics2D) g;
+    // ATTENZIONE !!! bisogna chiamare sempre prima il tileManager.draw rispetto al player.draw, perchè il layer sottostante deve
+    // essere quello del background
+    tileManager.draw(g2);
     // chiamo il metodo dalla classe player
     player.draw(g2);
     // dispose delle risorse occupate (non obbligatorio ma ottimizza l'utilizzo di memoria del software)
