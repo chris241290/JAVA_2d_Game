@@ -1,2 +1,1 @@
-# sei_top
-Sei top.
+# A simple 2d adventure/rpg made with JAVA SE
